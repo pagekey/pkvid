@@ -2,11 +2,9 @@ import json
 import os
 
 import yaml
-from pydantic import BaseModel
 
+from pkvid.project import ProjectConfig
 
-class ProjectConfig(BaseModel):
-    name: str
 
 class ConfigNotFoundException(Exception):
     pass

@@ -1,6 +1,7 @@
 import argparse
 
 from pkvid.config import get_config
+from pkvid.project import Project
 
 
 def main():
@@ -9,7 +10,9 @@ def main():
     args = parser.parse_args()
 
     if args.filename:
-        config = get_config(args.filename)
+        project_config = get_config(args.filename)
+        project = Project(project_config)
+        print(f"Successfully parsed project: {project.config.name}")
     else:
         parser.print_usage()
 
