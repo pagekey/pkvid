@@ -1,5 +1,7 @@
 import argparse
 
+from pkvid.config import process_config
+
 
 def main():
     parser = argparse.ArgumentParser(description='Video editing toolkit')
@@ -7,7 +9,7 @@ def main():
     args = parser.parse_args()
 
     if args.filename:
-        print(f"Processing file: {args.filename}")
+        process_config(args.filename)
     else:
         parser.print_usage()
 

@@ -10,3 +10,9 @@ authors = ["Steve G <pagekeysolutions@gmail.com>"]
 
 [tool.poetry.scripts]
 pkvid = 'pkvid.cli:main'
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
