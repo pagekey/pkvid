@@ -14,7 +14,7 @@ def main():
         project_config = get_config(args.filename)
         project = Project(project_config)
         print(f"Successfully parsed project: {project.config.name}")
-        render_video()
+        project.render()
     else:
         parser.print_usage()
 
