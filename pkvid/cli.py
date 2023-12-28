@@ -1,4 +1,5 @@
 import argparse
+from pkvid.blender import render_video
 
 from pkvid.config import get_config
 from pkvid.project import Project
@@ -13,6 +14,7 @@ def main():
         project_config = get_config(args.filename)
         project = Project(project_config)
         print(f"Successfully parsed project: {project.config.name}")
+        render_video()
     else:
         parser.print_usage()
 
