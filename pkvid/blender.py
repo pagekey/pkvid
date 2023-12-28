@@ -3,13 +3,6 @@ import shutil
 import bpy
 
 
-def init():
-    # set the path to blender
-    # the bpy package does not come with audio support
-    # so we have to use the installed one
-    blender_path = shutil.which('blender')
-    bpy.app.binary_path = blender_path
-
 def render_video(frame_start=1, frame_end=10, use_vse=False):
     scene = bpy.context.scene
     scene.render.filepath = "output"
