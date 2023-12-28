@@ -7,3 +7,6 @@ name = "pkvid"
 version = "0.1.0"
 description = "Python package intended to help with automation of video editing"
 authors = ["Steve G <pagekeysolutions@gmail.com>"]
+
+[tool.poetry.scripts]
+pkvid = 'pkvid.cli:cli_entry_point'
