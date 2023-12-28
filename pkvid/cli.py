@@ -1,6 +1,6 @@
 import argparse
 
-from pkvid.config import process_config
+from pkvid.config import get_config
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
     args = parser.parse_args()
 
     if args.filename:
-        process_config(args.filename)
+        config = get_config(args.filename)
     else:
         parser.print_usage()
 

@@ -2,7 +2,11 @@ import json
 import os
 
 import yaml
+from pydantic import BaseModel
 
+
+class ProjectConfig(BaseModel):
+    name: str
 
 class ConfigNotFoundException(Exception):
     pass
@@ -14,10 +18,12 @@ def get_file_as_string(filename: str):
         contents = file.read()
     return contents
 
-def process_config(filename: str):
+def get_config(filename: str):
     if os.path.exists(filename):
         contents = get_file_as_string(filename)
-        config = parse_string_to_dict(contents)
+        config_dict = parse_string_to_dict(contents)
+        config = ProjectConfig(**config_dict)
+        return config
     else:
         raise ConfigNotFoundException(f"File not found: {filename}")
 
