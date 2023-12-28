@@ -1,16 +1,18 @@
 import argparse
-from pkvid.blender import render_video
+import sys
 
+import pkvid.blender as blender
 from pkvid.config import get_config
 from pkvid.project import Project
 
 
-def main():
+def main(cli_args=sys.argv[1:]):
     parser = argparse.ArgumentParser(description='Video editing toolkit')
     parser.add_argument('filename', help='Name of config file')
-    args = parser.parse_args()
+    args = parser.parse_args(cli_args)
 
     if args.filename:
+        blender.init()
         project_config = get_config(args.filename)
         project = Project(project_config)
         print(f"Successfully parsed project: {project.config.name}")

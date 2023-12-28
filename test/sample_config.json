@@ -1,3 +1,9 @@
 {
-    "name": "Some project"
+    "name": "Some project",
+    "clips": [
+        {
+            "type": "video",
+            "path": "test/sample.mp4"
+        }
+    ]
 }

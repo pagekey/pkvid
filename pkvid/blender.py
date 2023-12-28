@@ -1,5 +1,14 @@
+import shutil
+
 import bpy
 
+
+def init():
+    # set the path to blender
+    # the bpy package does not come with audio support
+    # so we have to use the installed one
+    blender_path = shutil.which('blender')
+    bpy.app.binary_path = blender_path
 
 def render_video(frame_start=1, frame_end=10, use_vse=False):
     scene = bpy.context.scene
@@ -18,3 +27,39 @@ def render_video(frame_start=1, frame_end=10, use_vse=False):
         scene.render.use_sequencer = True
 
     bpy.ops.render.render(animation=True)
+
+
+def add_video(filename, channel=1):
+    scene = bpy.context.scene
+    sequence_editor = scene.sequence_editor
+
+    # Create a new sequence if one doesn't exist
+    if sequence_editor is None:
+        sequence_editor = scene.sequence_editor_create()
+
+    # Add the video file to the sequence editor as a video strip
+    video_strip = sequence_editor.sequences.new_movie(
+        frame_start=1,
+        name="VideoStrip",
+        filepath=filename,
+        channel=channel
+    )
+
+    return video_strip
+
+def add_audio(filename, channel=1):
+    scene = bpy.context.scene
+    sequence_editor = scene.sequence_editor
+
+    # Create a new sequence if one doesn't exist
+    if sequence_editor is None:
+        sequence_editor = scene.sequence_editor_create()
+
+    # Add the audio file to the sequence editor as an audio strip
+    audio_strip = sequence_editor.sequences.new_sound(
+        frame_start=1,
+        name="AudioStrip",
+        filepath=filename,
+        channel=channel
+    )
+    return audio_strip
