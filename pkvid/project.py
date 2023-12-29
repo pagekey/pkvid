@@ -20,6 +20,7 @@ class Project:
             else:
                 clip._start_frame = max_frame
             
+            visual_object = None
             # Take special actions based on clip type
             if clip.type == ClipType.SUBPROJECT:
                 blender.save_project(self.project_filename)
@@ -31,39 +32,30 @@ class Project:
                 # Add the renderer clip to this
                 video = blender.add_video(project.output_filename, start_frame=clip._start_frame, channel=clip.channel)
                 blender.add_audio(project.output_filename, start_frame=clip._start_frame, channel=clip.channel + 1)
-                # apply offset
-                video.transform.offset_x = int(clip.offset.x)
-                video.transform.offset_y = int(clip.offset.y)
-                # apply scale
-                video.transform.scale_x = clip.scale.x
-                video.transform.scale_y = clip.scale.y
+                visual_object = video
                 clip._end_frame = clip._start_frame + video.frame_final_duration
             elif clip.type == ClipType.TEXT:
                 clip._end_frame = clip._start_frame + clip.length
                 text = blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel)
-                # apply offset
-                text.transform.offset_x = int(clip.offset.x)
-                text.transform.offset_y = int(clip.offset.y)
-                # apply scale
-                text.transform.scale_x = clip.scale.x
-                text.transform.scale_y = clip.scale.y
+                visual_object = text
             elif clip.type == ClipType.VIDEO:
                 # Add the video based on clip.path
                 video = blender.add_video(clip.path, start_frame=clip._start_frame, channel=clip.channel)
-                # apply offset
-                video.transform.offset_x = int(clip.offset.x)
-                video.transform.offset_y = int(clip.offset.y)
-                # apply scale
-                video.transform.scale_x = clip.scale.x
-                video.transform.scale_y = clip.scale.y
+                visual_object = video
                 blender.add_audio(clip.path, start_frame=clip._start_frame, channel=clip.channel + 1)
                 clip._end_frame = clip._start_frame + video.frame_final_duration
             
+            # apply offset
+            visual_object.transform.offset_x = int(clip.offset.x)
+            visual_object.transform.offset_y = int(clip.offset.y)
+            # apply scale
+            visual_object.transform.scale_x = clip.scale.x
+            visual_object.transform.scale_y = clip.scale.y
             # Set clip._end_frame
             clip._length = clip._end_frame - clip._start_frame
-            if last_clip:
+            if last_clip and not clip.start_with_last:
                 max_frame = max(max_frame + clip._length, last_clip._end_frame)
             else:
-                max_frame = max_frame + clip.length
+                max_frame = max_frame + clip._length
         blender.save_project(self.project_filename)
         blender.render_video(filename=self.output_filename, frame_end=max_frame)
