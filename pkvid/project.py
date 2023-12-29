@@ -31,10 +31,22 @@ class Project:
                 # Add the renderer clip to this
                 video = blender.add_video(project.output_filename, start_frame=clip._start_frame, channel=clip.channel)
                 blender.add_audio(project.output_filename, start_frame=clip._start_frame, channel=clip.channel + 1)
+                # apply offset
+                video.transform.offset_x = int(clip.offset.x)
+                video.transform.offset_y = int(clip.offset.y)
+                # apply scale
+                video.transform.scale_x = clip.scale.x
+                video.transform.scale_y = clip.scale.y
                 clip._end_frame = clip._start_frame + video.frame_final_duration
             elif clip.type == ClipType.TEXT:
                 clip._end_frame = clip._start_frame + clip.length
-                blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel)
+                text = blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel)
+                # apply offset
+                text.transform.offset_x = int(clip.offset.x)
+                text.transform.offset_y = int(clip.offset.y)
+                # apply scale
+                text.transform.scale_x = clip.scale.x
+                text.transform.scale_y = clip.scale.y
             elif clip.type == ClipType.VIDEO:
                 # Add the video based on clip.path
                 video = blender.add_video(clip.path, start_frame=clip._start_frame, channel=clip.channel)

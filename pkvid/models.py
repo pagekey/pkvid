@@ -10,10 +10,16 @@ class ClipType(Enum):
     SUBPROJECT = 'subproject'
     TEXT = 'text'
 
+class CartesianPair(BaseModel):
+    x: float
+    y: float
+
 class Clip(BaseModel):
     type: ClipType
     channel: Optional[int] = 1
     start_with_last: Optional[bool] = False
+    offset: Optional[CartesianPair] = CartesianPair(x=0, y=0)
+    scale: Optional[CartesianPair] = CartesianPair(x=1, y=1)
 
 class SubProject(Clip):
     type: ClipType = ClipType.SUBPROJECT
@@ -24,15 +30,10 @@ class Text(Clip):
     body: str
     length: Optional[int] = 30
 
-class CartesianPair(BaseModel):
-    x: float
-    y: float
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
     path: str
-    offset: Optional[CartesianPair] = CartesianPair(x=0, y=0)
-    scale: Optional[CartesianPair] = CartesianPair(x=1, y=1)
 
 class ProjectConfig(BaseModel):
     name: str
