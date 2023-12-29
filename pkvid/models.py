@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Union
+from typing import Optional, Union
 
 from pydantic import BaseModel
 
@@ -10,8 +10,16 @@ class ClipType(Enum):
     SUBPROJECT = 'subproject'
     TEXT = 'text'
 
+class CartesianPair(BaseModel):
+    x: float
+    y: float
+
 class Clip(BaseModel):
     type: ClipType
+    channel: Optional[int] = 1
+    start_with_last: Optional[bool] = False
+    offset: Optional[CartesianPair] = CartesianPair(x=0, y=0)
+    scale: Optional[CartesianPair] = CartesianPair(x=1, y=1)
 
 class SubProject(Clip):
     type: ClipType = ClipType.SUBPROJECT
@@ -20,7 +28,8 @@ class SubProject(Clip):
 class Text(Clip):
     type: ClipType = ClipType.TEXT
     body: str
-    length: int = 30
+    length: Optional[int] = 30
+
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
