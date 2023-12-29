@@ -28,6 +28,10 @@ class Project:
             elif clip.type == ClipType.VIDEO:
                 # Add the video based on clip.path
                 video = blender.add_video(clip.path, start_frame=max_frame)
+                # apply offset
+                if clip.offset is not None:
+                    video.transform.offset_x = int(clip.offset.x)
+                    video.transform.offset_y = int(clip.offset.y)
                 # apply scale
                 if clip.scale is not None:
                     video.transform.scale_x = clip.scale.x

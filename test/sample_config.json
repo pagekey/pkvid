@@ -13,6 +13,10 @@
         {
             "type": "video",
             "path": "test/sample.mp4",
+            "offset": {
+                "x": -480,
+                "y": 270
+            },
             "scale": {
                 "x": 0.5,
                 "y": 0.5

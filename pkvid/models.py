@@ -22,14 +22,15 @@ class Text(Clip):
     body: str
     length: Optional[int] = 30
 
-class VideoScale(BaseModel):
+class CartesianPair(BaseModel):
     x: float
     y: float
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
     path: str
-    scale: Optional[VideoScale] = VideoScale(x=1, y=1)
+    offset: Optional[CartesianPair] = CartesianPair(x=0, y=0)
+    scale: Optional[CartesianPair] = CartesianPair(x=1, y=1)
 
 class ProjectConfig(BaseModel):
     name: str
