@@ -8,14 +8,15 @@ class Project:
         self.output_filename = f"{self.config.name}.mp4"
         self.project_filename = f"{self.config.name}.blend"
     def render(self):
+        blender.new_project()
         max_frame = 1
         for clip in self.config.clips:
             if clip.type == ClipType.SUBPROJECT:
                 blender.save_project(self.project_filename)
-                blender.new_project()
                 # Create and render the project
                 project = Project(clip.project)
                 project.render()
+                # Reopen this project (the child had their own)
                 blender.open_project(self.project_filename)
                 # Add the renderer clip to this
                 video = blender.add_video(project.output_filename, start_frame=max_frame)
