@@ -1,5 +1,19 @@
 import bpy
+import os
 
+
+def new_project():
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+
+def open_project(filename):
+    abs_filename = os.path.abspath(filename)
+    bpy.ops.wm.open_mainfile(filepath=abs_filename)
+
+def save_project(filename):
+    abs_filename = os.path.abspath(filename)
+    if os.path.exists(abs_filename):
+        os.remove(abs_filename)
+    bpy.ops.wm.save_as_mainfile(filepath=abs_filename)
 
 def render_video(filename='output.mp4', frame_start=1, frame_end=10, use_vse=False):
     scene = bpy.context.scene
@@ -32,13 +46,13 @@ def add_video(filename, channel=1, start_frame=1):
     video_strip = sequence_editor.sequences.new_movie(
         frame_start=start_frame,
         name="VideoStrip",
-        filepath=filename,
+        filepath=os.path.abspath(filename),
         channel=channel
     )
 
     return video_strip
 
-def add_audio(filename, channel=1, start_frame=1):
+def add_audio(filename, channel=2, start_frame=1):
     scene = bpy.context.scene
     sequence_editor = scene.sequence_editor
 
@@ -50,7 +64,20 @@ def add_audio(filename, channel=1, start_frame=1):
     audio_strip = sequence_editor.sequences.new_sound(
         frame_start=start_frame,
         name="AudioStrip",
-        filepath=filename,
+        filepath=os.path.abspath(filename),
         channel=channel
     )
     return audio_strip
+
+def add_text(body: str, start_frame=1, end_frame=31):
+    text_strip = bpy.context.scene.sequence_editor.sequences.new_effect(
+        name="MyText", type="TEXT", channel=1, frame_start=start_frame,
+        frame_end=end_frame,
+    )
+    text_strip.text = body
+    text_strip.font_size = 96
+    # text_strip.color = (0.0, 0.0, 0.0, 1.0)
+    text_strip.color = (1.0, 1.0, 1.0, 1.0)
+    text_strip.location.x = 0.5
+    text_strip.location.y = 0.5
+    return text_strip
