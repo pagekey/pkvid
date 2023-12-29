@@ -1,6 +1,5 @@
 import pkvid.blender as blender
-from pkvid.models.clip import ClipType
-from pkvid.models.project_config import ProjectConfig
+from pkvid.models import ClipType, ProjectConfig
 
 
 class Project:

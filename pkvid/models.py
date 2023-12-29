@@ -1,4 +1,6 @@
+from __future__ import annotations
 from enum import Enum
+from typing import Union
 
 from pydantic import BaseModel
 
@@ -16,4 +18,8 @@ class Video(Clip):
 
 class SubProject(Clip):
     type: ClipType = ClipType.SUBPROJECT
-    # project: ProjectConfig
+    project: ProjectConfig
+
+class ProjectConfig(BaseModel):
+    name: str
+    clips: list[Union[SubProject, Video]]
