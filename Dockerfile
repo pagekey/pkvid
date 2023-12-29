@@ -1,3 +1,6 @@
+# This was a failed attempt at building Blender from source
+# Leaving it here just in case it's needed later
+
 FROM ubuntu:jammy-20231211.1 as builder
 
 RUN apt update && apt install -y \
@@ -23,16 +26,18 @@ RUN apt update && apt install -y \
 #         libxinerama-dev \
 #         libxrandr-dev \
 #         libxkbcommon-dev \
+        libtbb-dev \
         libzstd-dev \
 #         linux-libc-dev \
         python3-dev \
+        python3-numpy \
 #         subversion \
 #         wayland-protocols \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/blender-git
 
-RUN git clone -b v4.0.2 --depth 1 https://projects.blender.org/blender/blender.git
+RUN git clone -b v3.6.7 --depth 1 https://projects.blender.org/blender/blender.git
 
 WORKDIR /root/blender-git/blender
 
@@ -48,4 +53,5 @@ WORKDIR /root/blender-git/cmake
 
 RUN cmake ../blender -DWITH_PYTHON_INSTALL=OFF -DWITH_AUDASPACE=ON -DWITH_PYTHON_MODULE=ON -DWITH_MOD_OCEANSIM=OFF
 
-RUN make
+RUN make 
+# build fails :(

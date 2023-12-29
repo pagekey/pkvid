@@ -7,12 +7,15 @@ from pkvid.project import Project
 
 
 def main(cli_args=sys.argv[1:]):
+    while cli_args[0] == '-b' or cli_args[0] == '-P' or 'pkvid' in cli_args[0]:
+        # chop off blender -b -P
+        cli_args = cli_args[1:]
+    print(cli_args)
     parser = argparse.ArgumentParser(description='Video editing toolkit')
     parser.add_argument('filename', help='Name of config file')
     args = parser.parse_args(cli_args)
 
     if args.filename:
-        blender.init()
         project_config = get_config(args.filename)
         project = Project(project_config)
         print(f"Successfully parsed project: {project.config.name}")
