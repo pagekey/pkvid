@@ -9,7 +9,7 @@ class Project:
         self.project_filename = f"{self.config.name}.blend"
     def render(self):
         blender.new_project()
-        max_frame = 1
+        max_frame = 0
         for clip in self.config.clips:
             if clip.type == ClipType.SUBPROJECT:
                 blender.save_project(self.project_filename)
@@ -19,24 +19,22 @@ class Project:
                 # Reopen this project (the child had their own)
                 blender.open_project(self.project_filename)
                 # Add the renderer clip to this
-                video = blender.add_video(project.output_filename, start_frame=max_frame)
-                blender.add_audio(project.output_filename, start_frame=max_frame)
+                video = blender.add_video(project.output_filename, start_frame=max_frame, channel=clip.channel)
+                blender.add_audio(project.output_filename, start_frame=max_frame, channel=clip.channel + 1)
                 max_frame += video.frame_final_duration
             elif clip.type == ClipType.TEXT:
-                blender.add_text(clip.body, start_frame=max_frame, end_frame=max_frame + clip.length)
+                blender.add_text(clip.body, start_frame=max_frame, end_frame=max_frame + clip.length, channel=clip.channel)
                 max_frame += clip.length
             elif clip.type == ClipType.VIDEO:
                 # Add the video based on clip.path
-                video = blender.add_video(clip.path, start_frame=max_frame)
+                video = blender.add_video(clip.path, start_frame=max_frame, channel=clip.channel)
                 # apply offset
-                if clip.offset is not None:
-                    video.transform.offset_x = int(clip.offset.x)
-                    video.transform.offset_y = int(clip.offset.y)
+                video.transform.offset_x = int(clip.offset.x)
+                video.transform.offset_y = int(clip.offset.y)
                 # apply scale
-                if clip.scale is not None:
-                    video.transform.scale_x = clip.scale.x
-                    video.transform.scale_y = clip.scale.y
-                blender.add_audio(clip.path, start_frame=max_frame)
+                video.transform.scale_x = clip.scale.x
+                video.transform.scale_y = clip.scale.y
+                blender.add_audio(clip.path, start_frame=max_frame, channel=clip.channel + 1)
                 max_frame += video.frame_final_duration
         blender.save_project(self.project_filename)
         blender.render_video(filename=self.output_filename, frame_end=max_frame)

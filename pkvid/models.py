@@ -12,6 +12,7 @@ class ClipType(Enum):
 
 class Clip(BaseModel):
     type: ClipType
+    channel: Optional[int] = 1
 
 class SubProject(Clip):
     type: ClipType = ClipType.SUBPROJECT

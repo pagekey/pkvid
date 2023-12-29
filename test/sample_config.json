@@ -13,6 +13,7 @@
         {
             "type": "video",
             "path": "test/sample.mp4",
+            "channel": 3,
             "offset": {
                 "x": -480,
                 "y": 270
