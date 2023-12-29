@@ -42,3 +42,9 @@ Same process, but for the last step, run this instead:
 ```bash
 $BLENDER_PYTHON -m pip install -e .
 ```
+
+## Example Run Command
+
+```bash
+blender -b -P pkvid/__main__.py test/sample_config.json 
+```
