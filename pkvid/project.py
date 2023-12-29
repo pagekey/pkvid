@@ -52,10 +52,8 @@ class Project:
             visual_object.transform.scale_x = clip.scale.x
             visual_object.transform.scale_y = clip.scale.y
             # Set clip._end_frame
-            clip._length = clip._end_frame - clip._start_frame
-            if last_clip and not clip.start_with_last:
-                max_frame = max(max_frame + clip._length, last_clip._end_frame)
-            else:
-                max_frame = max_frame + clip._length
+            max_frame = max(max_frame, clip._end_frame)
+            if last_clip:
+                max_frame = max(max_frame, clip._end_frame, last_clip._end_frame)
         blender.save_project(self.project_filename)
         blender.render_video(filename=self.output_filename, frame_end=max_frame)
