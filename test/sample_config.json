@@ -6,8 +6,20 @@
             "path": "test/sample.mp4"
         },
         {
-            "type": "video",
-            "path": "test/sample.mp4"
+            "type": "subproject",
+            "project": {
+                "name": "Nested Project",
+                "clips": [
+                    {
+                        "type": "video",
+                        "path": "test/sample.mp4"
+                    },
+                    {
+                        "type": "video",
+                        "path": "test/sample.mp4"
+                    }
+                ]
+            }
         }
     ]
 }
