@@ -3,3 +3,4 @@ __pycache__
 *.mp4
 !sample.mp4
 *.egg-info
+*.blend

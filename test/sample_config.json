@@ -2,6 +2,10 @@
     "name": "Some project",
     "clips": [
         {
+            "type": "text",
+            "body": "hello world"
+        },
+        {
             "type": "video",
             "path": "test/sample.mp4"
         },
