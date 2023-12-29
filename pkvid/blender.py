@@ -1,11 +1,9 @@
-import shutil
-
 import bpy
 
 
-def render_video(frame_start=1, frame_end=10, use_vse=False):
+def render_video(filename='output.mp4', frame_start=1, frame_end=10, use_vse=False):
     scene = bpy.context.scene
-    scene.render.filepath = "output"
+    scene.render.filepath = filename
     scene.render.resolution_x = 1920
     scene.render.resolution_y = 1080
     scene.frame_start = frame_start
