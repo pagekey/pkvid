@@ -22,7 +22,7 @@ def render_video(frame_start=1, frame_end=10, use_vse=False):
     bpy.ops.render.render(animation=True)
 
 
-def add_video(filename, channel=1):
+def add_video(filename, channel=1, start_frame=1):
     scene = bpy.context.scene
     sequence_editor = scene.sequence_editor
 
@@ -32,7 +32,7 @@ def add_video(filename, channel=1):
 
     # Add the video file to the sequence editor as a video strip
     video_strip = sequence_editor.sequences.new_movie(
-        frame_start=1,
+        frame_start=start_frame,
         name="VideoStrip",
         filepath=filename,
         channel=channel
@@ -40,7 +40,7 @@ def add_video(filename, channel=1):
 
     return video_strip
 
-def add_audio(filename, channel=1):
+def add_audio(filename, channel=1, start_frame=1):
     scene = bpy.context.scene
     sequence_editor = scene.sequence_editor
 
@@ -50,7 +50,7 @@ def add_audio(filename, channel=1):
 
     # Add the audio file to the sequence editor as an audio strip
     audio_strip = sequence_editor.sequences.new_sound(
-        frame_start=1,
+        frame_start=start_frame,
         name="AudioStrip",
         filepath=filename,
         channel=channel
