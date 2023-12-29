@@ -26,8 +26,8 @@ clips:
     start_with_last: true
   - type: text
     channel: 5
-    body: hi, I started with last
-    length: 15
+    body: hi, I am just a text
+    length: 45
     start_with_last: true
     offset:
       x: 480
