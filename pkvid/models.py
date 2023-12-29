@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Union
+from typing import Optional, Tuple, Union
 
 from pydantic import BaseModel
 
@@ -20,11 +20,16 @@ class SubProject(Clip):
 class Text(Clip):
     type: ClipType = ClipType.TEXT
     body: str
-    length: int = 30
+    length: Optional[int] = 30
+
+class VideoScale(BaseModel):
+    x: float
+    y: float
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
     path: str
+    scale: Optional[VideoScale] = VideoScale(x=1, y=1)
 
 class ProjectConfig(BaseModel):
     name: str

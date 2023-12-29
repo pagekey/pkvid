@@ -12,7 +12,11 @@
         },
         {
             "type": "video",
-            "path": "test/sample.mp4"
+            "path": "test/sample.mp4",
+            "scale": {
+                "x": 0.5,
+                "y": 0.5
+            }
         },
         {
             "type": "subproject",

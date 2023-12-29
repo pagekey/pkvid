@@ -28,6 +28,10 @@ class Project:
             elif clip.type == ClipType.VIDEO:
                 # Add the video based on clip.path
                 video = blender.add_video(clip.path, start_frame=max_frame)
+                # apply scale
+                if clip.scale is not None:
+                    video.transform.scale_x = clip.scale.x
+                    video.transform.scale_y = clip.scale.y
                 blender.add_audio(clip.path, start_frame=max_frame)
                 max_frame += video.frame_final_duration
         blender.save_project(self.project_filename)
