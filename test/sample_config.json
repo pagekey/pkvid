@@ -1,0 +1,13 @@
+{
+    "name": "Some project",
+    "clips": [
+        {
+            "type": "video",
+            "path": "test/sample.mp4"
+        },
+        {
+            "type": "video",
+            "path": "test/sample.mp4"
+        }
+    ]
+}
