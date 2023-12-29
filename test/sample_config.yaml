@@ -1,0 +1,39 @@
+name: Some project
+clips:
+  - type: text
+    body: this is 15 frames
+    length: 15
+  - type: text
+    body: this is 30 frames
+  - type: video
+    path: test/sample.mp4
+    channel: 3
+    offset:
+      x: -480
+      y: 270
+    scale:
+      x: 0.5
+      y: 0.5
+  - type: video
+    path: test/sample.mp4
+    channel: 1
+    offset:
+      x: 480
+      y: 270
+    scale:
+      x: 0.5
+      y: 0.5
+  - type: subproject
+    project:
+      name: Nested Project
+      clips:
+      - type: text
+        body: here is mr krabs a second time
+        length: 5
+      - type: video
+        path: test/sample.mp4
+      - type: text
+        body: here is mr krabs a third time
+        length: 15
+      - type: video
+        path: test/sample.mp4
