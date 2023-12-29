@@ -3,7 +3,12 @@
     "clips": [
         {
             "type": "text",
-            "body": "hello world"
+            "body": "this is 15 frames",
+            "length": 15
+        },
+        {
+            "type": "text",
+            "body": "this is 30 frames"
         },
         {
             "type": "video",

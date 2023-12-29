@@ -20,6 +20,7 @@ class SubProject(Clip):
 class Text(Clip):
     type: ClipType = ClipType.TEXT
     body: str
+    length: int = 30
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO

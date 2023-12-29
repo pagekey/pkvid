@@ -69,10 +69,10 @@ def add_audio(filename, channel=2, start_frame=1):
     )
     return audio_strip
 
-def add_text(body: str, frame_start=1, frame_end=31):
+def add_text(body: str, start_frame=1, end_frame=31):
     text_strip = bpy.context.scene.sequence_editor.sequences.new_effect(
-        name="MyText", type="TEXT", channel=1, frame_start=frame_start,
-        frame_end=frame_end,
+        name="MyText", type="TEXT", channel=1, frame_start=start_frame,
+        frame_end=end_frame,
     )
     text_strip.text = body
     text_strip.font_size = 96

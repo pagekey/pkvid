@@ -23,8 +23,8 @@ class Project:
                 blender.add_audio(project.output_filename, start_frame=max_frame)
                 max_frame += video.frame_final_duration
             elif clip.type == ClipType.TEXT:
-                blender.add_text(clip.body)
-                max_frame += 30 # TODO use length in text obj?
+                blender.add_text(clip.body, start_frame=max_frame, end_frame=max_frame + clip.length)
+                max_frame += clip.length
             elif clip.type == ClipType.VIDEO:
                 # Add the video based on clip.path
                 video = blender.add_video(clip.path, start_frame=max_frame)
