@@ -20,8 +20,18 @@
                 "name": "Nested Project",
                 "clips": [
                     {
+                        "type": "text",
+                        "body": "here is mr krabs a second time",
+                        "length": 5
+                    },
+                    {
                         "type": "video",
                         "path": "test/sample.mp4"
+                    },
+                    {
+                        "type": "text",
+                        "body": "here is mr krabs a third time",
+                        "length": 15
                     },
                     {
                         "type": "video",
