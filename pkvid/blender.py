@@ -52,7 +52,7 @@ def add_video(filename, channel=1, start_frame=1):
 
     return video_strip
 
-def add_audio(filename, channel=1, start_frame=1):
+def add_audio(filename, channel=2, start_frame=1):
     scene = bpy.context.scene
     sequence_editor = scene.sequence_editor
 
