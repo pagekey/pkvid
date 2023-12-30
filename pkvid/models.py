@@ -33,7 +33,8 @@ class Text(Clip):
 
 class Filter(Clip):
     type: ClipType = ClipType.FILTER
-    filter_function: str
+    module: str
+    function: str
     video: Video
 
 class Video(Clip):

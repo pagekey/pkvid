@@ -1,5 +1,6 @@
+import importlib
 import pkvid.blender as blender
-from pkvid.models import ClipType, ProjectConfig, SubProject, Text, Video
+from pkvid.models import ClipType, Filter, ProjectConfig, SubProject, Text, Video
 
 
 class Project:
@@ -7,6 +8,22 @@ class Project:
         self.config = config
         self.output_filename = f"{self.config.name}.mp4"
         self.project_filename = f"{self.config.name}.blend"
+    def add_filter(self, clip: Filter):
+        # Run filter to get the ProjectConfig
+        lib = importlib.import_module(clip.module)
+        func = getattr(lib, clip.function)
+        output = func(clip.video)
+        # Add ProjectConfig as a SubProject
+        subp = SubProject(
+            offset=clip.offset,
+            start_with_last=clip.start_with_last,
+            scale=clip.scale,
+            project=output,
+        )
+        subp._start_frame = clip._start_frame
+        video = self.add_subproject(subp)
+        clip._end_frame = subp._end_frame
+        return video
     def add_subproject(self, clip: SubProject):
         blender.save_project(self.project_filename)
         # Create and render the project
@@ -45,7 +62,9 @@ class Project:
             
             visual_object = None
             # Take special actions based on clip type
-            if clip.type == ClipType.SUBPROJECT:
+            if clip.type == ClipType.FILTER:
+                visual_object = self.add_filter(clip)
+            elif clip.type == ClipType.SUBPROJECT:
                 visual_object = self.add_subproject(clip)
             elif clip.type == ClipType.TEXT:
                 visual_object = self.add_text(clip)
