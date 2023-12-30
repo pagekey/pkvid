@@ -1,12 +1,52 @@
+import importlib
 import pkvid.blender as blender
-from pkvid.models import ClipType, ProjectConfig
+from pkvid.models import ClipType, Filter, ProjectConfig, SubProject, Text, Video
 
 
 class Project:
     def __init__(self, config: ProjectConfig):
         self.config = config
-        self.output_filename = f"{self.config.name}.mp4"
-        self.project_filename = f"{self.config.name}.blend"
+        self.output_filename = f"render/{self.config.name}.mp4"
+        self.project_filename = f"render/{self.config.name}.blend"
+    def add_filter(self, clip: Filter):
+        # Run filter to get the ProjectConfig
+        lib = importlib.import_module(clip.module)
+        func = getattr(lib, clip.function)
+        output = func(clip.video)
+        # Add ProjectConfig as a SubProject
+        subp = SubProject(
+            offset=clip.offset,
+            start_with_last=clip.start_with_last,
+            scale=clip.scale,
+            project=output,
+        )
+        subp._start_frame = clip._start_frame
+        video = self.add_subproject(subp)
+        clip._end_frame = subp._end_frame
+        return video
+    def add_subproject(self, clip: SubProject):
+        blender.save_project(self.project_filename)
+        # Create and render the project
+        project = Project(clip.project)
+        project.render()
+        # Reopen this project (the child had their own)
+        blender.open_project(self.project_filename)
+        # Add the pre-rendered video
+        video_clip = Video(path=project.output_filename, start_frame=clip._start_frame, channel=clip.channel)
+        video_clip._start_frame = clip._start_frame
+        video = self.add_video(video_clip)
+        clip._end_frame = video_clip._end_frame
+        return video
+    def add_text(self, clip: Text):
+        clip._end_frame = clip._start_frame + clip.length
+        text = blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel, size=clip.size)
+        return text
+    def add_video(self, clip: Video):
+        # Add the video based on clip.path
+        video = blender.add_video(clip.path, start_frame=clip._start_frame, channel=clip.channel)
+        blender.add_audio(clip.path, start_frame=clip._start_frame, channel=clip.channel + 1)
+        clip._end_frame = clip._start_frame + video.frame_final_duration
+        return video
     def render(self):
         blender.new_project()
         max_frame = 0
@@ -15,36 +55,24 @@ class Project:
             # Set clip._start_frame
             if idx > 0:
                 last_clip = self.config.clips[idx - 1]
-            if clip.start_with_last and last_clip is not None:
+            if clip.start_frame != -1:
+                clip._start_frame = clip.start_frame
+            elif clip.start_with_last and last_clip is not None:
                 clip._start_frame = last_clip._start_frame
             else:
                 clip._start_frame = max_frame
             
             visual_object = None
             # Take special actions based on clip type
-            if clip.type == ClipType.SUBPROJECT:
-                blender.save_project(self.project_filename)
-                # Create and render the project
-                project = Project(clip.project)
-                project.render()
-                # Reopen this project (the child had their own)
-                blender.open_project(self.project_filename)
-                # Add the renderer clip to this
-                video = blender.add_video(project.output_filename, start_frame=clip._start_frame, channel=clip.channel)
-                blender.add_audio(project.output_filename, start_frame=clip._start_frame, channel=clip.channel + 1)
-                visual_object = video
-                clip._end_frame = clip._start_frame + video.frame_final_duration
+            if clip.type == ClipType.FILTER:
+                visual_object = self.add_filter(clip)
+            elif clip.type == ClipType.SUBPROJECT:
+                visual_object = self.add_subproject(clip)
             elif clip.type == ClipType.TEXT:
-                clip._end_frame = clip._start_frame + clip.length
-                text = blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel)
-                visual_object = text
+                visual_object = self.add_text(clip)
             elif clip.type == ClipType.VIDEO:
-                # Add the video based on clip.path
-                video = blender.add_video(clip.path, start_frame=clip._start_frame, channel=clip.channel)
-                visual_object = video
-                blender.add_audio(clip.path, start_frame=clip._start_frame, channel=clip.channel + 1)
-                clip._end_frame = clip._start_frame + video.frame_final_duration
-            
+                visual_object = self.add_video(clip)
+
             # apply offset
             visual_object.transform.offset_x = int(clip.offset.x)
             visual_object.transform.offset_y = int(clip.offset.y)

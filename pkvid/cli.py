@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 
 import pkvid.blender as blender
@@ -18,6 +19,7 @@ def main(cli_args=sys.argv[1:]):
         project_config = get_config(args.filename)
         project = Project(project_config)
         print(f"Successfully parsed project: {project.config.name}")
+        os.makedirs('render', exist_ok=True)
         project.render()
     else:
         parser.print_usage()
