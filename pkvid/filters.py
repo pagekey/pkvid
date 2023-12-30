@@ -1,3 +1,4 @@
+import os
 import pkvid.blender as blender
 from pkvid.models import ProjectConfig, Text, Video
 
@@ -9,7 +10,7 @@ def add_captions(video: Video) -> ProjectConfig:
     blender.remove_video(video_clip)
     # Generate ProjectConfig
     return ProjectConfig(
-        name=f"{video.path}-add_captions",
+        name=f"{os.path.basename(video.path)}-add_captions",
         clips=[
             video,
             Text(
