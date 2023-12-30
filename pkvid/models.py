@@ -19,6 +19,7 @@ class Clip(BaseModel):
     type: ClipType
     channel: Optional[int] = 1
     start_with_last: Optional[bool] = False
+    start_frame: Optional[int] = -1
     offset: Optional[CartesianPair] = CartesianPair(x=0, y=0)
     scale: Optional[CartesianPair] = CartesianPair(x=1, y=1)
 
@@ -30,6 +31,7 @@ class Text(Clip):
     type: ClipType = ClipType.TEXT
     body: str
     length: Optional[int] = 30
+    size: Optional[float] = 96
 
 class Filter(Clip):
     type: ClipType = ClipType.FILTER

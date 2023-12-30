@@ -39,7 +39,7 @@ class Project:
         return video
     def add_text(self, clip: Text):
         clip._end_frame = clip._start_frame + clip.length
-        text = blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel)
+        text = blender.add_text(clip.body, start_frame=clip._start_frame, end_frame=clip._end_frame, channel=clip.channel, size=clip.size)
         return text
     def add_video(self, clip: Video):
         # Add the video based on clip.path
@@ -55,7 +55,9 @@ class Project:
             # Set clip._start_frame
             if idx > 0:
                 last_clip = self.config.clips[idx - 1]
-            if clip.start_with_last and last_clip is not None:
+            if clip.start_frame != -1:
+                clip._start_frame = clip.start_frame
+            elif clip.start_with_last and last_clip is not None:
                 clip._start_frame = last_clip._start_frame
             else:
                 clip._start_frame = max_frame
