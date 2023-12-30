@@ -6,9 +6,10 @@ from pydantic import BaseModel
 
 
 class ClipType(Enum):
-    VIDEO = 'video'
+    FILTER = 'filter'
     SUBPROJECT = 'subproject'
     TEXT = 'text'
+    VIDEO = 'video'
 
 class CartesianPair(BaseModel):
     x: float
@@ -30,6 +31,10 @@ class Text(Clip):
     body: str
     length: Optional[int] = 30
 
+class Filter(Clip):
+    type: ClipType = ClipType.FILTER
+    filter_function: str
+    video: Video
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
@@ -37,4 +42,4 @@ class Video(Clip):
 
 class ProjectConfig(BaseModel):
     name: str
-    clips: list[Union[SubProject, Text, Video]]
+    clips: list[Union[Filter, SubProject, Text, Video]]
