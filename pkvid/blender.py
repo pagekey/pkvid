@@ -45,12 +45,17 @@ def add_video(filename, channel=1, start_frame=1):
     # Add the video file to the sequence editor as a video strip
     video_strip = sequence_editor.sequences.new_movie(
         frame_start=start_frame,
-        name="VideoStrip",
+        name=filename,
         filepath=os.path.abspath(filename),
         channel=channel
     )
 
     return video_strip
+
+def remove_video(video_strip):
+    sequencer = bpy.context.scene.sequence_editor
+    if sequencer is not None and video_strip.name in sequencer.sequences:
+        sequencer.sequences.remove(video_strip)
 
 def add_audio(filename, channel=2, start_frame=1):
     scene = bpy.context.scene
