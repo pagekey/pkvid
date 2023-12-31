@@ -2,6 +2,14 @@
 
 This is a Python package intended to help with automation of video editing.
 
+## Building from scratch
+
+Some sources:
+
+- [Blender Community YouTube video](https://www.youtube.com/watch?v=WBAnd-r_x64)
+- [Building on Ubuntu](https://wiki.blender.org/wiki/Building_Blender/Linux/Ubuntu)
+- [Building bpy module](https://wiki.blender.org/wiki/Building_Blender/Other/BlenderAsPyModule)
+
 ## Installation Guide
 
 This package is not meant to be installed in a regular Python environment. Instead, you must install it from the Python that is embedded in Blender.
