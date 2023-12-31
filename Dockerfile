@@ -31,7 +31,6 @@ RUN apt update && apt install -y \
         linux-libc-dev \
         python3-dev \
         python3-pip \
-        python3-numpy \
         subversion \
         wayland-protocols \
     && rm -rf /var/lib/apt/lists/*
@@ -59,12 +58,18 @@ RUN ./build_files/build_environment/install_linux_packages.py && rm -rf /var/lib
 
 WORKDIR /root/blender-git/cmake
 
+# Fix error for numpy version wrong
+# (compiled against API version 0x10 instead of 0xe)
+RUN python3 -m pip install numpy --upgrade
+
+# Configure build
 RUN cmake ../blender \
     -DWITH_PYTHON_INSTALL=OFF \
     -DWITH_AUDASPACE=ON \
     -DWITH_PYTHON_MODULE=ON \
     -DWITH_MOD_OCEANSIM=OFF \
-    -DWITH_JEMALLOC=OFF
+    -DWITH_MEM_JEMALLOC=OFF \
+    -DWITH_STATIC_LIBS=ON
 
 # Build blender from source
 RUN make -j16
