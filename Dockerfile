@@ -1,6 +1,3 @@
-# This was a failed attempt at building Blender from source
-# Leaving it here just in case it's needed later
-
 FROM ubuntu:jammy-20231211.1 as builder
 
 RUN apt update && apt install -y \
@@ -68,8 +65,7 @@ RUN cmake ../blender \
     -DWITH_AUDASPACE=ON \
     -DWITH_PYTHON_MODULE=ON \
     -DWITH_MOD_OCEANSIM=OFF \
-    -DWITH_MEM_JEMALLOC=OFF \
-    -DWITH_STATIC_LIBS=ON
+    -DWITH_MEM_JEMALLOC=OFF
 
 # Build blender from source
 RUN make -j16
@@ -79,3 +75,26 @@ RUN make install
 RUN python3 ../blender/build_files/utils/make_bpy_wheel.py bin/
 
 RUN python3 -m pip install ./bin/bpy-*.whl
+
+# Start fresh, discard the (huge) build files
+FROM ubuntu:jammy-20231211.1 as runner
+
+RUN apt update && apt install -y \
+        python3 \
+        python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m pip install --upgrade pip
+
+
+WORKDIR /app/
+COPY requirements.txt pyproject.toml poetry.lock test /app/
+COPY pkvid /app/pkvid
+
+# Install requirements
+RUN python3 -m pip install -r requirements.txt
+# Install bpy
+COPY --from=builder /root/blender-git/cmake/bin/bpy-*.whl /
+RUN python3 -m pip install /bpy-*.whl
+# Install pkvid
+RUN python3 -m pip install -e .
