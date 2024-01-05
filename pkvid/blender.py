@@ -46,8 +46,8 @@ def add_video(filename, channel=1, start_frame=1):
     video_strip = sequence_editor.sequences.new_movie(
         frame_start=start_frame,
         name=filename,
-        filepath=os.path.abspath(filename),
-        channel=channel
+        filepath=os.path.join('..', filename), # since we are in the render dir
+        channel=channel,
     )
 
     return video_strip
@@ -69,7 +69,7 @@ def add_audio(filename, channel=2, start_frame=1):
     audio_strip = sequence_editor.sequences.new_sound(
         frame_start=start_frame,
         name="AudioStrip",
-        filepath=os.path.abspath(filename),
+        filepath=os.path.join('..', filename), # since we are in the render dir
         channel=channel
     )
     return audio_strip

@@ -6,8 +6,8 @@ from pkvid.models import ClipType, Filter, ProjectConfig, SubProject, Text, Vide
 class Project:
     def __init__(self, config: ProjectConfig):
         self.config = config
-        self.output_filename = f"render/{self.config.name}.mp4"
-        self.project_filename = f"render/{self.config.name}.blend"
+        self.output_filename = f"{self.config.name}.mp4"
+        self.project_filename = f"{self.config.name}.blend"
     def add_filter(self, clip: Filter):
         # Run filter to get the ProjectConfig
         lib = importlib.import_module(clip.module)
@@ -49,6 +49,7 @@ class Project:
         return video
     def render(self):
         blender.new_project()
+        blender.save_project(self.project_filename) # required for relative paths
         max_frame = 0
         for idx, clip in enumerate(self.config.clips):
             last_clip = None

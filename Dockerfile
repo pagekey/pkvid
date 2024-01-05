@@ -111,5 +111,6 @@ RUN echo "[general]\nrt-prio = 0" > /root/.config/alsoft.conf
 # Install pkvid
 RUN python3 -m pip install -e .
 
+WORKDIR /mnt
 ENTRYPOINT [ "pkvid" ]
 CMD [ "pkvid.yaml" ]
