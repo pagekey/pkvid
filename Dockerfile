@@ -86,7 +86,7 @@ RUN apt update && apt install -y \
         libxext6 \
         libxfixes3 \
         libxi6 \
-        libxxf86vm \
+        libxxf86vm-dev \
         python3 \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
@@ -95,7 +95,7 @@ RUN python3 -m pip install --upgrade pip
 
 
 WORKDIR /app/
-COPY requirements.txt pyproject.toml poetry.lock test /app/
+COPY setup.py requirements.txt test /app/
 COPY pkvid /app/pkvid
 
 # Install requirements
@@ -103,6 +103,11 @@ RUN python3 -m pip install -r requirements.txt
 # Install bpy
 COPY --from=builder /root/blender-git/cmake/bin/bpy-*.whl /
 RUN python3 -m pip install /bpy-*.whl
+# Clean up alsa warnings
+RUN echo "pcm.dummy {\n  type hw\n  card 0\n}\npcm.!default {\n  type plug\n  slave {\n    pcm \"dummy\"\n  }\n}\n" > /usr/share/alsa/alsa.conf
+RUN mkdir /root/.config
+RUN echo "[general]\nrt-prio = 0" > /root/.config/alsoft.conf
+
 # Install pkvid
 RUN python3 -m pip install -e .
 

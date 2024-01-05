@@ -2,6 +2,20 @@
 
 This is a Python package intended to help with automation of video editing.
 
+## Getting Started
+
+1. Build the Docker image. It will take a while. Final image will be huge, ~10-15 GB.
+
+```bash
+docker build -t pkvid .
+```
+
+2. Run pkvid.
+
+```bash
+docker run --rm pkvid
+```
+
 ## Building from scratch
 
 Some sources:
