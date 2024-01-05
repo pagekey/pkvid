@@ -80,6 +80,13 @@ RUN python3 -m pip install ./bin/bpy-*.whl
 FROM ubuntu:jammy-20231211.1 as runner
 
 RUN apt update && apt install -y \
+        ffmpeg \
+        libsm6 \
+        libxkbcommon-x11-0 \
+        libxext6 \
+        libxfixes3 \
+        libxi6 \
+        libxxf86vm \
         python3 \
         python3-pip \
     && rm -rf /var/lib/apt/lists/*
@@ -98,3 +105,5 @@ COPY --from=builder /root/blender-git/cmake/bin/bpy-*.whl /
 RUN python3 -m pip install /bpy-*.whl
 # Install pkvid
 RUN python3 -m pip install -e .
+
+CMD [ "pkvid" ]
