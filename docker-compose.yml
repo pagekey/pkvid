@@ -4,6 +4,6 @@ services:
   dev:
     image: pkvid
     build: .
-    entrypoint: bash
+    entrypoint: bash -c
     volumes:
       - .:/app

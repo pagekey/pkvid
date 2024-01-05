@@ -7,7 +7,7 @@ This is a Python package intended to help with automation of video editing.
 1. Build the Docker image. It will take a while. Final image will be huge, ~10-15 GB.
 
 ```bash
-docker build -t pkvid .
+docker-compose build
 ```
 
 2. Install the helper script.
@@ -21,6 +21,26 @@ sudo ./scripts/install.sh
 ```bash
 cd your-project
 pkvid
+```
+
+## Developer Instructions
+
+Run the test suite:
+
+```bash
+docker-compose run dev pytest
+```
+
+Run integration test:
+
+```bash
+docker-compose run dev pkvid test/integration/pkvid.yaml
+```
+
+Get a shell:
+
+```bash
+docker-compose run dev bash
 ```
 
 ## Usage without Docker (Not Recommended)
