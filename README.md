@@ -10,10 +10,17 @@ This is a Python package intended to help with automation of video editing.
 docker build -t pkvid .
 ```
 
-2. Run pkvid.
+2. Install the helper script.
 
 ```bash
-docker run --rm pkvid
+sudo ./scripts/install.sh
+```
+
+3. Run pkvid in a directory with `pkvid.yaml`.
+
+```bash
+cd your-project
+pkvid
 ```
 
 ## Usage without Docker (Not Recommended)
