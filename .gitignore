@@ -1,4 +1,5 @@
 dist/
+render/
 __pycache__
 *.mp4
 !sample.mp4
