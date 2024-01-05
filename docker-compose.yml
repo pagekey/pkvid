@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  dev:
+    image: pkvid
+    build: .
+    entrypoint: bash
+    volumes:
+      - .:/app

@@ -1,0 +1,9 @@
+.pytest_cache
+dist
+*.egg-info
+render
+
+.git
+Dockerfile
+docker-compose.yml
+.gitignore
