@@ -16,7 +16,10 @@ def main(cli_args=sys.argv[1:]):
         project_config = get_config(args.filename)
         project = Project(project_config)
         print(f"Successfully parsed project: {project.config.name}")
-        os.chdir(os.path.dirname(args.filename))
+        dirname = os.path.dirname(args.filename)
+        if len(dirname) > 0:
+            # if not already in that dir, go to it
+            os.chdir(os.path.dirname(args.filename))
         os.makedirs('render', exist_ok=True)
         os.chdir('render')
         project.render()
