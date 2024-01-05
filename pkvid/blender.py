@@ -10,6 +10,7 @@ def open_project(filename):
     bpy.ops.wm.open_mainfile(filepath=abs_filename)
 
 def save_project(filename):
+    bpy.context.scene.render.fps = 30
     abs_filename = os.path.abspath(filename)
     if os.path.exists(abs_filename):
         os.remove(abs_filename)
