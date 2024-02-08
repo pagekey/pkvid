@@ -8,12 +8,12 @@ include:
   - project: pagekeystreaming/cicd
     ref: 2-non-poetry
     file: 03-docs/docgen.yaml
-  - project: pagekey/libs/cicd
-    ref: main
-    file: 04-build/wheel.yaml
-  - project: pagekey/libs/cicd
-    ref: main
-    file: 05-publish/twine.yaml
+  # - project: pagekey/libs/cicd
+  #   ref: main
+  #   file: 04-build/wheel.yaml
+  # - project: pagekey/libs/cicd
+  #   ref: main
+  #   file: 05-publish/twine.yaml
 
 stages:
   - version
