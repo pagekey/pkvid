@@ -5,3 +5,4 @@ __pycache__
 !sample.mp4
 *.egg-info
 *.blend
+build/
