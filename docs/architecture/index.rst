@@ -8,11 +8,3 @@ These documents propose how the system should work, and after they are implement
    :caption: Contents:
 
    example/index.md
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
