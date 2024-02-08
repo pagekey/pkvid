@@ -1,0 +1,23 @@
+include:
+  - project: pagekey/libs/cicd
+    ref: main
+    file: 01-version/semantic-release.yaml
+  - project: pagekey/libs/cicd
+    ref: main
+    file: 02-test/pytest.yaml
+  - project: pagekey/libs/cicd
+    ref: main
+    file: 03-docs/docgen.yaml
+  - project: pagekey/libs/cicd
+    ref: main
+    file: 04-build/wheel.yaml
+  - project: pagekey/libs/cicd
+    ref: main
+    file: 05-publish/twine.yaml
+
+stages:
+  - version
+  - test
+  - docs
+  - build
+  - publish
