@@ -2,9 +2,9 @@ include:
   - project: pagekey/libs/cicd
     ref: main
     file: 01-version/semantic-release.yaml
-  - project: pagekey/libs/cicd
-    ref: main
-    file: 02-test/pytest.yaml
+  # - project: pagekey/libs/cicd
+  #   ref: main
+  #   file: 02-test/pytest.yaml
   - project: pagekeystreaming/cicd
     ref: 2-non-poetry
     file: 03-docs/docgen.yaml
