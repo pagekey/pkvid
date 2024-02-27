@@ -2,6 +2,8 @@
 
 This is a Python package intended to help with automation of video editing.
 
+See the docs site at [docs.pkvid.pagekey.io](https://docs.pkvid.pagekey.io/).
+
 ## Getting Started
 
 1. Build the Docker image. It will take a while. Final image will be huge, ~10-15 GB.
