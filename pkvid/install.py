@@ -1,2 +1,7 @@
+from pkvid.driver import BlenderDriver
+
+
 if __name__ == "__main__":
-    print('hi')
+    driver = BlenderDriver(debug=True)
+    driver.save_project('hi.blend')
+    driver.execute()
