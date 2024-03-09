@@ -1,0 +1,25 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pkvid"
+# Note: Version will be 0.0.0 for all local builds.
+# Will be replaced with actual version at build time in CI/CD.
+version = "0.0.0"
+description = "Python package intended to help with automation of video editing."
+authors = ["Steve G. <pagekeysolutions@gmail.com>"]
+
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "^2.5.3"
+pyyaml = "^6.0.1"
+# openai-whisper = "20231117"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^4.1.0"
+
+[tool.poetry.scripts]
+pkvid = "pkvid.cli:main"
