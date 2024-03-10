@@ -43,9 +43,27 @@ class ProjectConfig(BaseModel):
             driver = BlenderDriver(name=self.name, debug=True)
         # Use driver to render project
         total_length = 0
-        for clip in self.clips:
-            clip_length = clip.render(driver, start_frame=total_length)
-            total_length += clip_length
+        clip_lengths = []
+        for idx, clip in enumerate(self.clips):
+            if clip.start_with_last:
+                if idx < 1:
+                    raise ValueError("start_with_last set for first clip")
+                ref_idx = idx - 1
+                while self.clips[ref_idx].start_with_last:
+                    ref_idx -= 1
+                start_frame = total_length - clip_lengths[ref_idx]
+            else:
+                start_frame = total_length
+            clip_length = clip.render(driver, start_frame=start_frame)
+            clip_lengths.append(clip_length)
+            if clip.start_with_last:
+                # If we start w/ last, only increase length by the amount
+                # that this clip is LONGER than the last one
+                amount_increased = clip_length - clip_lengths[ref_idx]
+                if amount_increased > 0:
+                    total_length += amount_increased
+            else:
+                total_length += clip_length
         driver.save_project(f'{self.name}.blend')
         driver.render_video(self.get_output_filename(), frame_end=total_length)
         driver.execute()

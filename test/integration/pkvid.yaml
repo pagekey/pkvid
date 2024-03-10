@@ -12,7 +12,6 @@ clips:
     channel: 4
   - type: subproject
     channel: 6
-    start_with_last: true
     offset:
       x: -480
       y: -270
@@ -45,16 +44,19 @@ clips:
         scale:
           x: 0.5
           y: 0.5
-      # - type: video
-      #   path: sample.mp4
-      #   channel: 3
-      #   offset:
-      #     x: 480
-      #     y: 270
-      #   scale:
-      #     x: 0.5
-      #     y: 0.5
-      #   start_with_last: true
+      - type: video
+        path: sample.mp4
+        channel: 3
+        offset:
+          x: 480
+          y: 270
+        scale:
+          x: 0.5
+          y: 0.5
+        start_with_last: true
+      - type: text
+        body: ending subproject yo
+        length: 30
       # - type: filter
       #   module: pkvid.filters
       #   function: add_captions
