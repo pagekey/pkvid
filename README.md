@@ -125,3 +125,4 @@ Building Blender from scratch:
 - [Blender Community YouTube video](https://www.youtube.com/watch?v=WBAnd-r_x64)
 - [Building on Ubuntu](https://wiki.blender.org/wiki/Building_Blender/Linux/Ubuntu)
 - [Building bpy module](https://wiki.blender.org/wiki/Building_Blender/Other/BlenderAsPyModule)
+
