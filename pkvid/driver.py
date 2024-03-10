@@ -11,7 +11,8 @@ class BlenderDriverError(Exception):
 
 class BlenderDriver:
 
-    def __init__(self, debug=False):
+    def __init__(self, name="default", debug=False):
+        self.name = name
         self._debug = debug
         self._commands = ['import bpy']
 
@@ -19,7 +20,7 @@ class BlenderDriver:
         if shutil.which('blender'):
             with tempfile.NamedTemporaryFile(mode='w+') as temp_file:
                 if self._debug:
-                    debug_file = open('blender_driver_debug.py', 'w')
+                    debug_file = open('blender_driver_debug_%s.py' % self.name, 'w')
                 for line in self._commands:
                     text_to_file = line + '\n'
                     temp_file.write(text_to_file)

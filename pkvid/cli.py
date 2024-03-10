@@ -1,4 +1,6 @@
 import argparse
+import os
+import shutil
 import sys
 
 from pkvid.models import ProjectConfig
@@ -26,7 +28,15 @@ def main(cli_args=sys.argv[1:]):
         print("render", args.filename)
         config = ProjectConfig.load(args.filename)
         print(f"Successfully parsed project: {config.name}")
+        # Set up build directory
+        shutil.rmtree('build', ignore_errors=True)
+        orig_dir = os.getcwd()
+        os.makedirs('build', exist_ok=True)
+        os.chdir('build')
+        # Perform render of project
         config.render()
+        # Restore original directory
+        os.chdir(orig_dir)
     else:
         parser.print_usage()
 

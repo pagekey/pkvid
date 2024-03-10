@@ -11,6 +11,13 @@ import yaml
 from pkvid.driver import BlenderDriver
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
+def video_length(filename: str):
+    clip = VideoFileClip(filename)
+    seconds = clip.duration
+    fps = 30
+    duration = int(seconds * fps)
+    clip.close()
+    return duration
 
 class ProjectConfig(BaseModel):
     name: str
@@ -27,22 +34,20 @@ class ProjectConfig(BaseModel):
             config = ProjectConfig(**config_dict)
         return config
     
-    def render(self, driver: BlenderDriver = BlenderDriver(debug=True)):
-        # Set up build directory
-        shutil.rmtree('build', ignore_errors=True)
-        orig_dir = os.getcwd()
-        os.makedirs('build', exist_ok=True)
-        os.chdir('build')
+    def get_output_filename(self):
+        return f"{self.name}.mp4"
+
+    def render(self, driver: BlenderDriver = None):
+        if driver is None:
+            driver = BlenderDriver(name=self.name, debug=True)
         # Use driver to render project
         total_length = 0
         for clip in self.clips:
             clip_length = clip.render(driver, start_frame=total_length)
             total_length += clip_length
         driver.save_project(f'{self.name}.blend')
-        driver.render_video(f'{self.name}.mp4', frame_end=total_length)
+        driver.render_video(self.get_output_filename(), frame_end=total_length)
         driver.execute()
-        # Restore original directory
-        os.chdir(orig_dir)
 
 
 class ClipType(Enum):
@@ -80,7 +85,11 @@ class SubProject(Clip):
     project: ProjectConfig
 
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
-        return 0
+        # Render the subproject to a video file
+        self.project.render()
+        # Add that rendered video to project
+        abspath = os.path.abspath(self.project.get_output_filename())
+        return Video(path=abspath).render(driver, start_frame=start_frame)
 
 
 class Text(Clip):
@@ -113,10 +122,4 @@ class Video(Clip):
         abspath = os.path.abspath(os.path.join('..', self.path))
         driver.add_video(abspath, start_frame=start_frame)
         driver.add_audio(abspath, start_frame=start_frame)
-        # Determine length of clip
-        clip = VideoFileClip(abspath)
-        seconds = clip.duration
-        fps = 30
-        duration = int(seconds * fps)
-        clip.close()
-        return duration
+        return video_length(abspath)
