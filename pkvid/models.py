@@ -1,5 +1,6 @@
 from __future__ import annotations
 from enum import Enum
+import json
 from typing import Optional, Union
 
 from pydantic import BaseModel
@@ -46,3 +47,7 @@ class Video(Clip):
 class ProjectConfig(BaseModel):
     name: str
     clips: list[Union[Filter, SubProject, Text, Video]]
+
+    def save(self, filename: str):
+        with open(filename) as file:
+            json.dump(self.model_dump(), file)

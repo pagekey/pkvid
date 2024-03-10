@@ -3,7 +3,7 @@ import os
 
 import yaml
 
-from pkvid.project import ProjectConfig
+from pkvid.models import ProjectConfig
 
 
 class ConfigNotFoundException(Exception):
