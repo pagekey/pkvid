@@ -6,50 +6,71 @@ See the docs site at [docs.pkvid.pagekey.io](https://docs.pkvid.pagekey.io/).
 
 ## Getting Started
 
+1. Ensure blender is installed on your system and on your PATH as `blender`. If you can run `blender --version` in a terminal, you're good to go.
+
+2. Install `pkvid`. You must have at least Python 3.9 for this.
+
+```bash
+pip install pkvid
+```
+
+3. Generate a new project:
+
+```bash
+pkvid new
+```
+
+4. You should now see `pkvid.yaml` in the current directory. Run:
+
+```bash
+pkvid render
+```
+
+5. Check the `build/` folder for your rendered project. You may also open the Blender project file to explore/debug.
+
+
+## Building Blender with Sound in Docker (Advanced)
+
 1. Build the Docker image. It will take a while. Final image will be huge, ~10-15 GB.
 
 ```bash
 docker-compose build
 ```
 
-2. Install the helper script.
-
-```bash
-sudo ./scripts/install.sh
-```
-
-3. Run pkvid in a directory with `pkvid.yaml`.
-
-```bash
-cd your-project
-pkvid
-```
-
 ## Developer Instructions
 
-Run the test suite:
+1. Install poetry.
 
 ```bash
-docker-compose run dev pytest
+pip install poetry
 ```
 
-Run integration test:
+2. Install dependencies.
 
 ```bash
-docker-compose run dev pkvid test/integration/pkvid.yaml
+poetry install --with dev --with filters
 ```
 
-Get a shell:
+3. Run the test suite:
 
 ```bash
-docker-compose run dev bash
+poetry run pytest
 ```
 
-## Usage without Docker (Not Recommended)
+4. Run integration test:
+
+```bash
+cd test/integration
+poetry run pkvid render
+```
+
+## Old GUides
+
+Do not follow these guides. I need to find a better place to put them, or just delete them.
 
 These are old guides - leaving them here in case they're useful at some point.
 
-### Installation Guide 
+### OLD Installation Guide 
 
 This package is not meant to be installed in a regular Python environment. Instead, you must install it from the Python that is embedded in Blender.
 
@@ -82,7 +103,7 @@ $BLENDER_PYTHON -m pip install --upgrade pip
 $BLENDER_PYTHON -m pip install pkvid
 ```
 
-### Development Install
+### OLD Development Install
 
 Same process, but for the last step, run this instead:
 
@@ -90,7 +111,7 @@ Same process, but for the last step, run this instead:
 $BLENDER_PYTHON -m pip install -e .
 ```
 
-### Example Run Command
+### OLD Example Run Command
 
 ```bash
 blender -b -P pkvid/__main__.py test/sample_config.json 
