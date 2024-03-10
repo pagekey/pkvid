@@ -2,6 +2,8 @@ name: Some project
 clips:
   - type: video
     path: sample.mp4
+  - type: video
+    path: sample.mp4
   # - type: filter
   #   module: pkvid.filters
   #   function: add_captions

@@ -9,6 +9,7 @@ from pydantic import BaseModel
 import yaml
 
 from pkvid.driver import BlenderDriver
+from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
 class ProjectConfig(BaseModel):
@@ -33,10 +34,12 @@ class ProjectConfig(BaseModel):
         os.makedirs('build', exist_ok=True)
         os.chdir('build')
         # Use driver to render project
+        total_length = 0
         for clip in self.clips:
-            clip.render(driver)
+            clip_length = clip.render(driver, start_frame=total_length)
+            total_length += clip_length
         driver.save_project(f'{self.name}.blend')
-        driver.render_video(f'{self.name}.mp4')
+        driver.render_video(f'{self.name}.mp4', frame_end=total_length)
         driver.execute()
         # Restore original directory
         os.chdir(orig_dir)
@@ -62,7 +65,13 @@ class Clip(BaseModel, ABC):
     scale: Optional[CartesianPair] = CartesianPair(x=1, y=1)
 
     @abstractmethod
-    def render(self, driver: BlenderDriver):
+    def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
+        """
+        Use the driver to render this clip.
+
+        Returns:
+            The length of the clip rendered.
+        """
         pass
 
 
@@ -70,8 +79,8 @@ class SubProject(Clip):
     type: ClipType = ClipType.SUBPROJECT
     project: ProjectConfig
 
-    def render(self, driver: BlenderDriver):
-        pass
+    def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
+        return 0
 
 
 class Text(Clip):
@@ -80,8 +89,8 @@ class Text(Clip):
     length: Optional[int] = 30
     size: Optional[float] = 96
 
-    def render(self, driver: BlenderDriver):
-        pass
+    def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
+        return 0
 
 
 class Filter(Clip):
@@ -90,16 +99,23 @@ class Filter(Clip):
     function: str
     video: Video
 
-    def render(self, driver: BlenderDriver):
-        pass
+    def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
+        return 0
 
 
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
     path: str
 
-    def render(self, driver: BlenderDriver):
+    def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
         # join with .. because we are currently cwd'd into the build folder
         abspath = os.path.abspath(os.path.join('..', self.path))
-        driver.add_video(abspath)
-        driver.add_audio(abspath)
+        driver.add_video(abspath, start_frame=start_frame)
+        driver.add_audio(abspath, start_frame=start_frame)
+        # Determine length of clip
+        clip = VideoFileClip(abspath)
+        seconds = clip.duration
+        fps = 30
+        duration = int(seconds * fps)
+        clip.close()
+        return duration

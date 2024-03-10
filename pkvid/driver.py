@@ -92,7 +92,7 @@ class BlenderDriver:
         self._commands.append('audio_strip = sequence_editor.sequences.new_sound(')
         self._commands.append('    frame_start=%d,' % start_frame)
         self._commands.append('    name="AudioStrip",')
-        self._commands.append('    filepath="%s",' % os.path.join('..', filename))  # since we are in the render dir
+        self._commands.append('    filepath="%s",' % filename)
         self._commands.append('    channel=%d' % channel)
         self._commands.append(')')
 
