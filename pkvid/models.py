@@ -90,7 +90,8 @@ class Text(Clip):
     size: Optional[float] = 96
 
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
-        return 0
+        driver.add_text(self.body, start_frame=start_frame, end_frame=start_frame + self.length)
+        return self.length
 
 
 class Filter(Clip):

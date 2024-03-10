@@ -96,6 +96,21 @@ class BlenderDriver:
         self._commands.append('    channel=%d' % channel)
         self._commands.append(')')
 
+    def add_text(self, body: str, start_frame=1, end_frame=31, channel=1, size=96):
+        self._commands.append('sequence_editor = bpy.context.scene.sequence_editor')
+        self._commands.append('text_strip = sequence_editor.sequences.new_effect(')
+        self._commands.append('    name="MyText",')
+        self._commands.append('    type="TEXT",')
+        self._commands.append('    channel=%d,' % channel)
+        self._commands.append('    frame_start=%d,' % start_frame)
+        self._commands.append('    frame_end=%d' % end_frame)
+        self._commands.append(')')
+        self._commands.append('text_strip.text = "%s"' % body)
+        self._commands.append('text_strip.font_size = %d' % size)
+        self._commands.append('text_strip.color = (1.0, 1.0, 1.0, 1.0)')
+        self._commands.append('text_strip.location.x = 0.5')
+        self._commands.append('text_strip.location.y = 0.5')
+
 # def remove_video(video_strip):
 #     sequencer = bpy.context.scene.sequence_editor
 #     if sequencer is not None and video_strip.name in sequencer.sequences:
@@ -118,18 +133,3 @@ class BlenderDriver:
 #     )
 #     return audio_strip
 
-# def add_text(body: str, start_frame=1, end_frame=31, channel=1, size=96):
-#     text_strip = bpy.context.scene.sequence_editor.sequences.new_effect(
-#         name="MyText",
-#         type="TEXT",
-#         channel=channel,
-#         frame_start=start_frame,
-#         frame_end=end_frame,
-#     )
-#     text_strip.text = body
-#     text_strip.font_size = size
-#     # text_strip.color = (0.0, 0.0, 0.0, 1.0)
-#     text_strip.color = (1.0, 1.0, 1.0, 1.0)
-#     text_strip.location.x = 0.5
-#     text_strip.location.y = 0.5
-#     return text_strip
