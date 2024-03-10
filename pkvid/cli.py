@@ -3,8 +3,7 @@ import os
 import shutil
 import sys
 
-from pkvid.models import ProjectConfig
-# from pkvid.project import Project
+from pkvid.project import ProjectConfig
 
 
 def main(cli_args=sys.argv[1:]):

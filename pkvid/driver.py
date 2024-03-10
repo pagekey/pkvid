@@ -2,7 +2,7 @@ import os
 import shutil
 import tempfile
 
-from pkvid.models2 import CartesianPair
+from pkvid.models import CartesianPair
 
 
 
@@ -119,26 +119,3 @@ class BlenderDriver:
         self._commands.append('text_strip.transform.offset_y = %d' % offset.y)
         self._commands.append('text_strip.transform.scale_x = %f' % scale.x)
         self._commands.append('text_strip.transform.scale_y = %f' % scale.y)
-
-# def remove_video(video_strip):
-#     sequencer = bpy.context.scene.sequence_editor
-#     if sequencer is not None and video_strip.name in sequencer.sequences:
-#         sequencer.sequences.remove(video_strip)
-
-# def add_audio(filename, channel=2, start_frame=1):
-#     scene = bpy.context.scene
-#     sequence_editor = scene.sequence_editor
-
-#     # Create a new sequence if one doesn't exist
-#     if sequence_editor is None:
-#         sequence_editor = scene.sequence_editor_create()
-
-#     # Add the audio file to the sequence editor as an audio strip
-#     audio_strip = sequence_editor.sequences.new_sound(
-#         frame_start=start_frame,
-#         name="AudioStrip",
-#         filepath=os.path.join('..', filename), # since we are in the render dir
-#         channel=channel
-#     )
-#     return audio_strip
-

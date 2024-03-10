@@ -2,7 +2,7 @@ import os
 
 import whisper
 
-from pkvid.models import CartesianPair, ProjectConfig, Text, Video
+from pkvid.project import CartesianPair, ProjectConfig, Text, Video
 
 
 def add_captions(video: Video) -> ProjectConfig:
