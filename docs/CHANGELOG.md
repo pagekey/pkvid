@@ -1,3 +1,5 @@
+# [2.0.0](https://gitlab.com/pagekey/apps/pkvid/pkvid/compare/1.0.0...2.0.0) (2024-03-10)
+
 # 1.0.0 (2024-02-09)
 
 
