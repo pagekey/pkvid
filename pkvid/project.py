@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from enum import Enum
 import importlib
+import json
 import os
 from typing import Optional, Union
 
@@ -27,7 +28,12 @@ class ProjectConfig(BaseModel):
 
     def save(self, filename: str):
         with open(filename, 'w') as file:
-            yaml.dump(self.model_dump(), file)
+            # slight workaround: json first, then yaml
+            # otherwise, dumping ClipType gets messed up
+            json_str = self.model_dump_json()
+            # convert to yaml
+            config_dict = json.loads(json_str)
+            yaml.dump(config_dict, file)
     @staticmethod
     def load(filename: str):
         with open(filename) as file:
@@ -69,7 +75,7 @@ class ProjectConfig(BaseModel):
         driver.execute()
 
 
-class ClipType(Enum):
+class ClipType(str, Enum):
     FILTER = 'filter'
     SUBPROJECT = 'subproject'
     TEXT = 'text'
