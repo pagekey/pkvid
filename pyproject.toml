@@ -15,8 +15,10 @@ authors = ["Steve G. <pagekeysolutions@gmail.com>"]
 python = ">=3.9"
 pydantic = "^2.5.3"
 pyyaml = "^6.0.1"
-# openai-whisper = "20231117"
 moviepy = "^1.0.3"
+
+[tool.poetry.group.filters.dependencies]
+openai-whisper = "20231117"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"

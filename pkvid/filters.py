@@ -2,7 +2,6 @@ import os
 
 import whisper
 
-import pkvid.blender as blender
 from pkvid.models import CartesianPair, ProjectConfig, Text, Video
 
 

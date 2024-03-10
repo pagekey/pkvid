@@ -1,6 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from enum import Enum
+import importlib
 import os
 import shutil
 from typing import Optional, Union
@@ -132,7 +133,20 @@ class Filter(Clip):
     video: Video
 
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
-        return 0
+        # Run filter to get the ProjectConfig
+        lib = importlib.import_module(self.module)
+        func = getattr(lib, self.function)
+        self.video.path = os.path.abspath(os.path.join('..', self.video.path))
+        output = func(self.video)
+        # Add ProjectConfig as a SubProject
+        subp = SubProject(
+            offset=self.offset,
+            start_with_last=self.start_with_last,
+            scale=self.scale,
+            project=output,
+            start_frame=start_frame,
+        )
+        return subp.render(driver, start_frame=start_frame)
 
 
 class Video(Clip):

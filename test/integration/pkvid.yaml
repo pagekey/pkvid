@@ -57,9 +57,9 @@ clips:
       - type: text
         body: ending subproject yo
         length: 30
-      # - type: filter
-      #   module: pkvid.filters
-      #   function: add_captions
-      #   video:
-      #     type: video
-      #     path: sample.mp4
+      - type: filter
+        module: pkvid.filters
+        function: add_captions
+        video:
+          type: video
+          path: goggins.mp4
