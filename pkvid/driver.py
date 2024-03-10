@@ -2,6 +2,8 @@ import os
 import shutil
 import tempfile
 
+from pkvid.models2 import CartesianPair
+
 
 
 class BlenderDriverError(Exception):
@@ -65,7 +67,7 @@ class BlenderDriver:
 
         self._commands.append('bpy.ops.render.render(animation=True)')
 
-    def add_video(self, filename, channel=1, start_frame=1):
+    def add_video(self, filename, offset: CartesianPair, scale: CartesianPair, channel=1, start_frame=1):
         self._commands.append('scene = bpy.context.scene')
         self._commands.append('sequence_editor = scene.sequence_editor')
 
@@ -80,6 +82,10 @@ class BlenderDriver:
         self._commands.append('    filepath="%s",' % filename)
         self._commands.append('    channel=%d' % channel)
         self._commands.append(')')
+        self._commands.append('video_strip.transform.offset_x = %d' % offset.x)
+        self._commands.append('video_strip.transform.offset_y = %d' % offset.y)
+        self._commands.append('video_strip.transform.scale_x = %f' % scale.x)
+        self._commands.append('video_strip.transform.scale_y = %f' % scale.y)
 
     def add_audio(self, filename, channel=2, start_frame=1):
         self._commands.append('scene = bpy.context.scene')

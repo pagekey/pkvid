@@ -11,6 +11,8 @@ import yaml
 from pkvid.driver import BlenderDriver
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
+from pkvid.models2 import CartesianPair
+
 def video_length(filename: str):
     clip = VideoFileClip(filename)
     seconds = clip.duration
@@ -26,7 +28,6 @@ class ProjectConfig(BaseModel):
     def save(self, filename: str):
         with open(filename, 'w') as file:
             yaml.dump(self.model_dump(), file)
-        print("Wrote", filename)
     @staticmethod
     def load(filename: str):
         with open(filename) as file:
@@ -55,10 +56,6 @@ class ClipType(Enum):
     SUBPROJECT = 'subproject'
     TEXT = 'text'
     VIDEO = 'video'
-
-class CartesianPair(BaseModel):
-    x: float
-    y: float
 
 
 class Clip(BaseModel, ABC):
@@ -99,7 +96,11 @@ class Text(Clip):
     size: Optional[float] = 96
 
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
-        driver.add_text(self.body, start_frame=start_frame, end_frame=start_frame + self.length)
+        driver.add_text(
+            self.body, 
+            start_frame=start_frame, 
+            end_frame=start_frame + self.length
+        )
         return self.length
 
 
@@ -120,6 +121,6 @@ class Video(Clip):
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
         # join with .. because we are currently cwd'd into the build folder
         abspath = os.path.abspath(os.path.join('..', self.path))
-        driver.add_video(abspath, start_frame=start_frame)
+        driver.add_video(abspath, offset=self.offset, scale=self.scale, start_frame=start_frame)
         driver.add_audio(abspath, start_frame=start_frame)
         return video_length(abspath)
