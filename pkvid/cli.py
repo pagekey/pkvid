@@ -3,7 +3,7 @@ import os
 import shutil
 import sys
 
-from pkvid.project import ProjectConfig
+from pkvid.project import ProjectConfig, Text, Video
 
 
 def main(cli_args=sys.argv[1:]):
@@ -22,6 +22,19 @@ def main(cli_args=sys.argv[1:]):
         # Read a string for the name from the user
         name = input("What is the name of the project? ")
         config = ProjectConfig(name=name, clips=[])
+        while input("Add a clip? (y/n) ") == 'y':
+            print("Choose a clip type:")
+            print("v) Video")
+            print("t) Text")
+            clip_type = input("> ")
+            if clip_type == 'v':
+                path = input("Enter path to video: ")
+                config.clips.append(Video(path=path))
+            elif clip_type == 't':
+                body = input("Enter text: ")
+                config.clips.append(Text(body=body))
+            else:
+                print("Invalid clip type")
         config.save('pkvid.yaml')
     elif args.command == 'render':
         print("render", args.filename)
