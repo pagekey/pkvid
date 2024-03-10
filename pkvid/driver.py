@@ -103,7 +103,7 @@ class BlenderDriver:
         self._commands.append('    channel=%d' % channel)
         self._commands.append(')')
 
-    def add_text(self, body: str, start_frame=1, end_frame=31, channel=1, size=96):
+    def add_text(self, body: str, offset: CartesianPair, scale: CartesianPair, start_frame=1, end_frame=31, channel=1, size=96):
         self._commands.append('sequence_editor = bpy.context.scene.sequence_editor')
         self._commands.append('text_strip = sequence_editor.sequences.new_effect(')
         self._commands.append('    name="MyText",')
@@ -115,8 +115,10 @@ class BlenderDriver:
         self._commands.append('text_strip.text = "%s"' % body)
         self._commands.append('text_strip.font_size = %d' % size)
         self._commands.append('text_strip.color = (1.0, 1.0, 1.0, 1.0)')
-        self._commands.append('text_strip.location.x = 0.5')
-        self._commands.append('text_strip.location.y = 0.5')
+        self._commands.append('text_strip.transform.offset_x = %d' % offset.x)
+        self._commands.append('text_strip.transform.offset_y = %d' % offset.y)
+        self._commands.append('text_strip.transform.scale_x = %f' % scale.x)
+        self._commands.append('text_strip.transform.scale_y = %f' % scale.y)
 
 # def remove_video(video_strip):
 #     sequencer = bpy.context.scene.sequence_editor

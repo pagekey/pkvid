@@ -2,11 +2,14 @@ name: Some project
 clips:
   - type: video
     path: sample.mp4
+    channel: 1
   - type: text
     body: this is 15 frames
     length: 15
+    channel: 3
   - type: video
     path: sample.mp4
+    channel: 4
   - type: subproject
     channel: 6
     start_with_last: true
@@ -31,17 +34,17 @@ clips:
         scale:
           x: 0.5
           y: 0.5
-      # - type: text
-      #   channel: 5
-      #   body: hi, I am just a text
-      #   length: 45
-      #   start_with_last: true
-      #   offset:
-      #     x: 480
-      #     y: -270
-      #   scale:
-      #     x: 0.5
-      #     y: 0.5
+      - type: text
+        channel: 5
+        body: hi, I am just a text
+        length: 45
+        start_with_last: true
+        offset:
+          x: 480
+          y: -270
+        scale:
+          x: 0.5
+          y: 0.5
       # - type: video
       #   path: sample.mp4
       #   channel: 3

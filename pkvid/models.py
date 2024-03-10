@@ -86,7 +86,7 @@ class SubProject(Clip):
         self.project.render()
         # Add that rendered video to project
         abspath = os.path.abspath(self.project.get_output_filename())
-        return Video(path=abspath).render(driver, start_frame=start_frame)
+        return Video(path=abspath, channel=self.channel).render(driver, start_frame=start_frame)
 
 
 class Text(Clip):
@@ -97,9 +97,12 @@ class Text(Clip):
 
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
         driver.add_text(
-            self.body, 
+            self.body,
+            self.offset,
+            self.scale,
             start_frame=start_frame, 
-            end_frame=start_frame + self.length
+            end_frame=start_frame + self.length,
+            channel=self.channel,
         )
         return self.length
 
@@ -121,6 +124,16 @@ class Video(Clip):
     def render(self, driver: BlenderDriver, start_frame: int = 0) -> int:
         # join with .. because we are currently cwd'd into the build folder
         abspath = os.path.abspath(os.path.join('..', self.path))
-        driver.add_video(abspath, offset=self.offset, scale=self.scale, start_frame=start_frame)
-        driver.add_audio(abspath, start_frame=start_frame)
+        driver.add_video(
+            abspath, 
+            offset=self.offset, 
+            scale=self.scale, 
+            start_frame=start_frame, 
+            channel=self.channel
+        )
+        driver.add_audio(
+            abspath, 
+            start_frame=start_frame, 
+            channel=self.channel + 1
+        )
         return video_length(abspath)
