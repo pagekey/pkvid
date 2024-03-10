@@ -4,6 +4,30 @@ import json
 from typing import Optional, Union
 
 from pydantic import BaseModel
+import yaml
+
+from pkvid.driver import BlenderDriver
+
+
+class ProjectConfig(BaseModel):
+    name: str
+    clips: list[Union[Filter, SubProject, Text, Video]]
+
+    def save(self, filename: str):
+        with open(filename, 'w') as file:
+            yaml.dump(self.model_dump(), file)
+        print("Wrote", filename)
+    @staticmethod
+    def load(filename: str):
+        with open(filename) as file:
+            config_dict = yaml.safe_load(file)
+            config = ProjectConfig(**config_dict)
+        return config
+    
+    def render(self, driver: BlenderDriver = BlenderDriver()):
+        driver.save_project(f'{self.name}.blend')
+        driver.render_video()
+        driver.execute()
 
 
 class ClipType(Enum):
@@ -43,11 +67,3 @@ class Filter(Clip):
 class Video(Clip):
     type: ClipType = ClipType.VIDEO
     path: str
-
-class ProjectConfig(BaseModel):
-    name: str
-    clips: list[Union[Filter, SubProject, Text, Video]]
-
-    def save(self, filename: str):
-        with open(filename) as file:
-            json.dump(self.model_dump(), file)

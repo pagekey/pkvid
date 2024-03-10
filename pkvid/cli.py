@@ -1,7 +1,6 @@
 import argparse
 import sys
 
-from pkvid.config import get_config
 from pkvid.models import ProjectConfig
 # from pkvid.project import Project
 
@@ -21,12 +20,13 @@ def main(cli_args=sys.argv[1:]):
         print("Create a new project here")
         # Read a string for the name from the user
         name = input("What is the name of the project? ")
-        config = ProjectConfig(name=name)
+        config = ProjectConfig(name=name, clips=[])
         config.save('pkvid.yaml')
     elif args.command == 'render':
         print("render", args.filename)
-        project_config = get_config(args.filename)
-        print(f"Successfully parsed project: {project_config.name}")
+        config = ProjectConfig.load(args.filename)
+        print(f"Successfully parsed project: {config.name}")
+        config.render()
         # project = Project(project_config)
         # dirname = os.path.dirname(args.filename)
         # if len(dirname) > 0:

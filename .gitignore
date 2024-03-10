@@ -7,3 +7,4 @@ __pycache__
 *.blend
 build/
 blender_driver_debug.py
+pkvid.yaml
