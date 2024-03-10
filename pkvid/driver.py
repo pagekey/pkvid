@@ -47,7 +47,7 @@ class BlenderDriver:
             os.remove(abs_filename)
         self._commands.append('bpy.ops.wm.save_as_mainfile(filepath="%s")' % abs_filename)
     
-    def render_video(self, filename='output.mp4', frame_start=1, frame_end=10, use_vse=False):
+    def render_video(self, filename='output.mp4', frame_start=1, frame_end=10, use_vse=True):
         self._commands.append('scene = bpy.context.scene')
         self._commands.append('scene.render.filepath = "%s"' % filename)
         self._commands.append('scene.render.resolution_x = 1920')
@@ -76,6 +76,22 @@ class BlenderDriver:
         self._commands.append('video_strip = sequence_editor.sequences.new_movie(')
         self._commands.append('    frame_start=%d,' % start_frame)
         self._commands.append('    name="%s",' % filename)
+        self._commands.append('    filepath="%s",' % filename)
+        self._commands.append('    channel=%d' % channel)
+        self._commands.append(')')
+
+    def add_audio(self, filename, channel=2, start_frame=1):
+        self._commands.append('scene = bpy.context.scene')
+        self._commands.append('sequence_editor = scene.sequence_editor')
+
+        # Create a new sequence if one doesn't exist
+        self._commands.append('if sequence_editor is None:')
+        self._commands.append('    sequence_editor = scene.sequence_editor_create()')
+
+        # Add the audio file to the sequence editor as an audio strip
+        self._commands.append('audio_strip = sequence_editor.sequences.new_sound(')
+        self._commands.append('    frame_start=%d,' % start_frame)
+        self._commands.append('    name="AudioStrip",')
         self._commands.append('    filepath="%s",' % os.path.join('..', filename))  # since we are in the render dir
         self._commands.append('    channel=%d' % channel)
         self._commands.append(')')

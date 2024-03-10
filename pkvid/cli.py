@@ -27,14 +27,6 @@ def main(cli_args=sys.argv[1:]):
         config = ProjectConfig.load(args.filename)
         print(f"Successfully parsed project: {config.name}")
         config.render()
-        # project = Project(project_config)
-        # dirname = os.path.dirname(args.filename)
-        # if len(dirname) > 0:
-        #     # if not already in that dir, go to it
-        #     os.chdir(os.path.dirname(args.filename))
-        # os.makedirs('render', exist_ok=True)
-        # os.chdir('render')
-        # project.render()
     else:
         parser.print_usage()
 
