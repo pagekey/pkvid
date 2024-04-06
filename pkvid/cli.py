@@ -1,28 +1,54 @@
 import argparse
 import os
+import shutil
 import sys
 
-import pkvid.blender as blender
-from pkvid.config import get_config
-from pkvid.project import Project
+from pkvid.project import ProjectConfig, Text, Video
 
 
 def main(cli_args=sys.argv[1:]):
     parser = argparse.ArgumentParser(description='Video editing toolkit')
-    parser.add_argument('filename', help='Name of config file')
+    subparsers = parser.add_subparsers(dest='command')
+
+    new_parser = subparsers.add_parser('new', help='Create a new project')
+
+    render_parser = subparsers.add_parser('render', help='Render a project')
+    render_parser.add_argument('-f', '--filename', help='Name of config file', default='pkvid.yaml')
+
     args = parser.parse_args(cli_args)
 
-    if args.filename:
-        project_config = get_config(args.filename)
-        project = Project(project_config)
-        print(f"Successfully parsed project: {project.config.name}")
-        dirname = os.path.dirname(args.filename)
-        if len(dirname) > 0:
-            # if not already in that dir, go to it
-            os.chdir(os.path.dirname(args.filename))
-        os.makedirs('render', exist_ok=True)
-        os.chdir('render')
-        project.render()
+    if args.command == 'new':
+        print("Create a new project here")
+        # Read a string for the name from the user
+        name = input("What is the name of the project? ")
+        config = ProjectConfig(name=name, clips=[])
+        while input("Add a clip? (y/n) ") == 'y':
+            print("Choose a clip type:")
+            print("v) Video")
+            print("t) Text")
+            clip_type = input("> ")
+            if clip_type == 'v':
+                path = input("Enter path to video: ")
+                config.clips.append(Video(path=path))
+            elif clip_type == 't':
+                body = input("Enter text: ")
+                config.clips.append(Text(body=body))
+            else:
+                print("Invalid clip type")
+        config.save('pkvid.yaml')
+    elif args.command == 'render':
+        print("render", args.filename)
+        config = ProjectConfig.load(args.filename)
+        print(f"Successfully parsed project: {config.name}")
+        # Set up build directory
+        shutil.rmtree('build', ignore_errors=True)
+        orig_dir = os.getcwd()
+        os.makedirs('build', exist_ok=True)
+        os.chdir('build')
+        # Perform render of project
+        config.render()
+        # Restore original directory
+        os.chdir(orig_dir)
     else:
         parser.print_usage()
 

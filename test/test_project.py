@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from pkvid.models import Video
+from pkvid.project import Video
 import pytest
 
 from pkvid.project import Project, ProjectConfig

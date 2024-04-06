@@ -1,6 +1,0 @@
-#!/bin/bash
-
-INPUT_DIR=$(realpath $1)
-
-mkdir -p render
-docker run --rm -v "$INPUT_DIR:/mnt/" pkvid
